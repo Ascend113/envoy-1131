@@ -11,14 +11,6 @@ interface Star {
   hue: number
 }
 
-const SAMPLE_INTENTIONS: Omit<Star, 'id' | 'x' | 'y' | 'size' | 'delay' | 'hue'>[] = [
-  { intention: 'Unity Consciousness for all' },
-  { intention: 'Healing for the Planet' },
-  { intention: 'Love and light for every soul ascending' },
-  { intention: 'Peace across all dimensions' },
-  { intention: 'Awakening for those ready to receive' },
-]
-
 const STORAGE_KEY = 'envoy1131_manifestations'
 
 function createStar(intention: string, id: number): Star {
@@ -41,7 +33,7 @@ function loadStars(): Star[] {
       if (Array.isArray(parsed) && parsed.length > 0) return parsed
     }
   } catch { /* ignore */ }
-  return SAMPLE_INTENTIONS.map((s, i) => createStar(s.intention, i + 1))
+  return []
 }
 
 function saveStars(stars: Star[]) {
@@ -149,7 +141,10 @@ export default function ManifestationPortal() {
             The Ascension Sky
           </h3>
           <p className="text-envoy-sky/60 text-sm mt-2">
-            {`${stars.length} intention${stars.length !== 1 ? 's' : ''} anchoring light into the collective field`}
+            {stars.length === 0
+              ? 'The sky awaits your first intention. Be the first to anchor a star of light.'
+              : `${stars.length} intention${stars.length !== 1 ? 's' : ''} anchoring light into the collective field`
+            }
           </p>
         </div>
 
@@ -184,6 +179,18 @@ export default function ManifestationPortal() {
               }}
             />
           ))}
+
+          {/* Empty state message in the sky */}
+          {stars.length === 0 && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center px-6">
+                <div className="text-3xl mb-3 opacity-40">✦</div>
+                <p className="text-envoy-sky/40 text-sm max-w-xs">
+                  Set your intention above to anchor the first star into the Ascension Sky.
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Intention Stars */}
           {stars.map((star) => {
